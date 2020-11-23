@@ -64,7 +64,7 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
       //Paper Link
       'https://www.bestbuy.com/site/insignia-92-bright-multipurpose-paper-500-count-white/2449084.p?skuId=2449084'
       //Digital PS5 Link
-      //https://www.bestbuy.com/site/sony-playstation-5-digital-edition-console/6430161.p?skuId=6430161
+      //'https://www.bestbuy.com/site/sony-playstation-5-digital-edition-console/6430161.p?skuId=6430161'
     )
 
 
@@ -75,7 +75,7 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
         await page.waitForSelector(
           'button[class="btn btn-primary btn-lg btn-block btn-leading-ficon add-to-cart-button"]',
           {
-            timeout: 2000
+            timeout: 10000
           }
         )
         break
@@ -110,8 +110,8 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
 
     await page.waitForTimeout(10000)
 
-    //const placeYourOrder = await page.$('button[class="btn btn-lg btn-block btn-primary button__fast-track"]')
-    //await placeYourOrder.click()
+    const placeYourOrder = await page.$('button[class="btn btn-lg btn-block btn-primary button__fast-track"]')
+    await placeYourOrder.click()
 
   } catch (error) {
     console.log(error)
