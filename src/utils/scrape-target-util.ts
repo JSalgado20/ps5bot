@@ -65,8 +65,12 @@ export const scrapeTarget = async (config: { [key: string]: string }) => {
     await page.goto(
       //Paper Link
       //'https://www.target.com/p/500ct-letter-printer-paper-white-up-38-up-8482/-/A-75001545#lnk=sametab'
+
       //Digital PS5 Link
-      'https://www.target.com/p/playstation-5-digital-edition-console/-/A-81114596#lnk=sametab'
+      //'https://www.target.com/p/playstation-5-digital-edition-console/-/A-81114596#lnk=sametab'
+
+      //PS5 Console Link
+      'https://www.target.com/p/playstation-5-console/-/A-81114595#lnk=sametab'
     )
 
     let pickUpOnly: boolean = false;

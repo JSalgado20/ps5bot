@@ -64,8 +64,12 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
     await page.goto(
       //Paper Link
       //'https://www.bestbuy.com/site/insignia-92-bright-multipurpose-paper-500-count-white/2449084.p?skuId=2449084'
+
       //Digital PS5 Link
-      'https://www.bestbuy.com/site/sony-playstation-5-digital-edition-console/6430161.p?skuId=6430161'
+      //'https://www.bestbuy.com/site/sony-playstation-5-digital-edition-console/6430161.p?skuId=6430161'
+
+      //PS5 Console
+      'https://www.bestbuy.com/site/sony-playstation-5-console/6426149.p?skuId=6426149'
     )
 
 
