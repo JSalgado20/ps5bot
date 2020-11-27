@@ -10,8 +10,12 @@ const command: GluegunCommand = {
     const { prompt, print } = toolbox
     print.info(`
     Welcome to your CLI. Please enter your checkout info in the following prompts.
-    All data will only be stored in your computer. 
+
+    All data will only be stored in your computer, don't worry about this being stored remotely. 
+    (Regardless, all the program will ask you for is your cvv, target email & password, and best buy email and password.)
+
     You can choose to fill out the configs in config.json based on template provided in configTemplate.json.
+    (But answering these questions right now will do that for you)
     `)
     const cvv = await input('cvv', prompt, print)
     const targetEmail = await input('Target Email', prompt, print)
@@ -40,7 +44,9 @@ const command: GluegunCommand = {
     print.info(`
     We're ready to go. Enter the following comand to run the scraper:
 
-      ps5bot scrape
+    (Your terminal needs to be in the bin folder directory, so it can "see" the ps5bot code)
+
+      ./ps5bot scrape
     `)
   }
 }
