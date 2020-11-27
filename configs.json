@@ -1,0 +1,20 @@
+{
+  "firstName": "Qwer",
+  "lastName": "Ty",
+  "phoneNumber": "8011111111",
+  "email": "email@example.com",
+  "state": "State",
+  "city": "Random City",
+  "address": "2353 Running Water Ct.",
+  "zipCode": "95054",
+  "creditCardNumber": "0101101010101",
+  "expirationMonth": "10",
+  "expirationYear": "2022",
+  "cvv": "000",
+  "targetEmail": "myemail@yahoo.com",
+  "targetPassword": "password",
+  "walmartEmail": "myemail@yahoo.com",
+  "walmartPassword": "password",
+  "bestBuyEmail": "myemail@yahoo.com",
+  "bestBuyPassword": "password"
+}

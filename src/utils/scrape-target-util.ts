@@ -1,28 +1,12 @@
 import * as puppeteer from 'puppeteer'
-import * as notifier from 'node-notifier'
 
 export const scrapeTarget = async (config: { [key: string]: string }) => {
   const {
-    phoneNumber,
-    firstName,
-    lastName,
-    state,
-    city,
-    zipCode,
-    address,
-    creditCardNumber,
-    expirationMonth,
-    expirationYear,
     cvv,
     targetEmail,
     targetPassword
   } = config
 
-  if (!targetEmail || !targetPassword) {
-    throw new Error(
-      'targetEmail and targetPassword settings not set in config.json'
-    )
-  }
 
   const browser = await puppeteer.launch({
     headless: false,
@@ -30,10 +14,11 @@ export const scrapeTarget = async (config: { [key: string]: string }) => {
     defaultViewport: null
   })
 
+  //Major Try catch, contains everything
   try {
+    //Opens a new browser
     const page = await browser.newPage()
     await page.setRequestInterception(true)
-
     page.on('request', async req => {
       if (req.resourceType() === 'image') {
         await req.abort()
@@ -42,141 +27,135 @@ export const scrapeTarget = async (config: { [key: string]: string }) => {
       }
     })
 
-    await page.goto('https://www.target.com')
-    const accountDropdown = await page.$('#account')
-    await accountDropdown.click()
-
-    await page.waitForTimeout(6000)
-    const signInButton = await page.$('#accountNav-signIn')
-    await signInButton.click()
-    await page.waitForTimeout(6000)
-    await page.type('#username', targetEmail)
-    await page.type('#password', targetPassword)
-    await page.keyboard.press('Enter')
-
-    await page.waitForTimeout(6000)
-    const isJoinRequest = await page.$('#circle-join-free')
-    if (isJoinRequest) {
-      console.log('join request exists')
-      const skipButton = await page.$('#circle-skip')
-      await skipButton.click()
-    } else {
-      console.log("join request doesn't exists")
-    }
-
+    //Opens Play station link
     await page.goto(
-      'https://www.target.com/p/playstation-5-digital-edition-console/-/A-81114596'
+      'https://www.target.com/account'
     )
-    // await page.goto(
-    //   'https://www.target.com/p/dualsense-wireless-controller-for-playstation-5/-/A-81114477'
-    // )
 
-    await page.waitForTimeout(4000)
+    await page.waitForTimeout(5000)
 
+    //Wait till sign in button is visible
     while (true) {
       try {
-        await page.waitForSelector('button[data-test="shipItButton"]', {
-          timeout: 10000
-        })
+        await page.waitForSelector(
+          'button[type="submit"]',
+          {
+            timeout: 10000
+          }
+        )
         break
       } catch (error) {
-        await page.reload()
       }
     }
 
-    const shipItButton = await page.$('button[data-test="shipItButton"]')
-    await shipItButton.click()
-    await page.waitForTimeout(4000)
+    //Enters sign in information
+    await page.type('input[name="username"', targetEmail)
+    await page.type('input[name="password"]', targetPassword)
 
-    const noCoverageButton = await page.$(
-      'button[data-test="espModalContent-declineCoverageButton"]'
+    //Clicks sign in button
+    const signInButton = await page.$(
+      'button[type="submit"]'
     )
-    await noCoverageButton.click()
+    await signInButton.click()
 
-    await page.waitForTimeout(4000)
-    const addToCartModalViewCartCheckout = await page.$(
-      'button[data-test="addToCartModalViewCartCheckout"]'
+    console.log("Target: Waiting for the page to load")
+    await page.waitForTimeout(10000)
+
+    //Go to item page
+    await page.goto(
+      //Paper Link
+      //'https://www.target.com/p/500ct-letter-printer-paper-white-up-38-up-8482/-/A-75001545#lnk=sametab'
+      //Digital PS5 Link
+      'https://www.target.com/p/playstation-5-digital-edition-console/-/A-81114596#lnk=sametab'
     )
-    await addToCartModalViewCartCheckout.click()
 
-    await page.waitForTimeout(6000)
+    let pickUpOnly: boolean = false;
+    let shipItOnly: boolean = false;
+
+
+    console.log("Trying to find add to cart")
+    // keep refreshing until "Add to Cart" is visible
+    while (true) {
+      try {
+        await page.waitForSelector(
+          'button[data-test="orderPickupButton"]',
+          {
+            timeout: 10000
+          }
+        )
+        pickUpOnly = true;
+        break
+      } catch (error) {
+        try {
+          await page.reload()
+        }
+        catch (error) {
+          continue
+        }
+      }
+
+      try {
+        await page.waitForSelector(
+          'button[data-test="orderPickupButton"]',
+          {
+            timeout: 10000
+          }
+        )
+        shipItOnly = true;
+        break
+      } catch (error) {
+        try {
+          await page.reload()
+        }
+        catch (error) {
+          continue
+        }
+      }
+    }
+
+    //Add To Cart
+    console.log("Target: Trying to click Add to cart")
+
+    if (pickUpOnly) {
+      const addToCartButton = await page.$(
+        'button[data-test="orderPickupButton"]'
+      )
+
+      await addToCartButton.click()
+    }
+    else if (shipItOnly) {
+      const addToCartButtonShip = await page.$(
+        'button[data-test="orderPickupButton"]'
+      )
+
+      await addToCartButtonShip.click()
+    }
+
+
+    //Go to Cart
+    await page.goto('https://www.target.com/co-cart')
+
+    console.log("Target: Trying to checkout of here")
+
+    //Checkout Button
+    await page.waitForTimeout(5000)
     const checkoutButton = await page.$('button[data-test="checkout-button"]')
     await checkoutButton.click()
 
-    await page.waitForTimeout(6000)
-    const isCreditCardSavedAttemptOne = await page.$(
-      'button[data-test="verify-card-button"]'
-    )
-    if (isCreditCardSavedAttemptOne) {
-      await page.type('#creditCardInput-cardNumber', creditCardNumber)
-      // expiration date format: MM/YY e.g. 08/24
-      await isCreditCardSavedAttemptOne.click()
-      await page.waitForTimeout(6000)
-      await page.type('#creditCardInput-cvv', cvv)
-      await page.keyboard.press('Enter')
-    } else {
-      // checkout page
-      const existingAddress = await page.$('div[data-test="address-0"]')
-      if (existingAddress) {
-        console.log('address exists')
-        await existingAddress.click()
-        const saveAndContinueButton = await page.$(
-          'button[data-test="save-and-continue-button"]'
-        )
-        await saveAndContinueButton.click()
-      } else {
-        console.log("address doesn't exists")
-        await page.type('#full_name', `${firstName} ${lastName}`)
-        await page.type('#address_line1', address)
-        await page.type('#zip_code', zipCode)
-        await page.type('#city', city)
-        await page.type('#mobile', phoneNumber)
-        await page.select('#state', state)
-        const saveAndContinueButton = await page.$(
-          'button[data-test="saveButton"]'
-        )
-        await saveAndContinueButton.click()
-      }
-      await page.waitForTimeout(6000)
-      await page.type('#creditCardInput-cardNumber', creditCardNumber)
+    await page.waitForTimeout(5000)
+    await page.type('input[data-test="credit-card-cvv-input"]', cvv)
 
-      const isCreditCardSaved = await page.$(
-        'button[data-test="verify-card-button"]'
-      )
-      if (!isCreditCardSaved) {
-        // expiration date format: MM/YY e.g. 08/24
-        await page.type(
-          '#creditCardInput-expiration',
-          `${expirationMonth}/${expirationYear.slice(2, 4)}`
-        )
-        await page.type('#creditCardInput-cvv', cvv)
-        await page.type('#creditCardInput-cardName', `${firstName} ${lastName}`)
-        const saveAndContinueButton = await page.$(
-          'button[data-test="save-and-continue-button"]'
-        )
-        await saveAndContinueButton.click()
-      } else {
-        await isCreditCardSaved.click()
-        await page.waitForTimeout(6000)
-        await page.type('#creditCardInput-cvv', cvv)
-        await page.keyboard.press('Enter')
-      }
-    }
 
-    notifier.notify({
-      title: 'Target',
-      message: 'Ready to place order!',
-      sound: true
-    })
+    const placeYourOrder = await page.$('button[data-test="placeOrderButton"]')
+    await placeYourOrder.click()
 
-    // await page.waitForTimeout(4000)
-    const placeOrderButton = await page.$(
-      'button[data-test="placeOrderButton"]'
-    )
-    placeOrderButton.click()
+    await page.waitForTimeout(60000)
+
+    console.log("Target: Order submitted")
+
   } catch (error) {
     console.log(error)
   } finally {
-    // await browser.close();
+    await browser.close();
   }
 }

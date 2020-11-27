@@ -1,5 +1,5 @@
 import { GluegunToolbox } from 'gluegun'
-import { BESTBUY } from '../contants'
+import { BESTBUY, TARGET } from '../contants'
 
 module.exports = {
   name: 'scrape',
@@ -10,6 +10,7 @@ module.exports = {
     const { scrape } = toolbox
 
     scrape(BESTBUY)
+    scrape(TARGET)
   }
   /*
   const { sitesToScrape }: { sitesToScrape: string[] } = await prompt.ask({

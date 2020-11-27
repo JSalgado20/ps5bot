@@ -3,6 +3,7 @@ import * as puppeteer from 'puppeteer'
 
 export const scrapeBestBuy = async (config: { [key: string]: string }) => {
   const {
+    cvv,
     bestBuyEmail,
     bestBuyPassword,
     //cvv
@@ -62,14 +63,14 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
     //Go to item page
     await page.goto(
       //Paper Link
-      'https://www.bestbuy.com/site/insignia-92-bright-multipurpose-paper-500-count-white/2449084.p?skuId=2449084'
+      //'https://www.bestbuy.com/site/insignia-92-bright-multipurpose-paper-500-count-white/2449084.p?skuId=2449084'
       //Digital PS5 Link
-      //'https://www.bestbuy.com/site/sony-playstation-5-digital-edition-console/6430161.p?skuId=6430161'
+      'https://www.bestbuy.com/site/sony-playstation-5-digital-edition-console/6430161.p?skuId=6430161'
     )
 
 
     console.log("Trying to find add to cart")
-    // keep refreshing until "Add to Cart is visible"
+    // keep refreshing until "Add to Cart" is visible
     while (true) {
       try {
         await page.waitForSelector(
@@ -80,7 +81,12 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
         )
         break
       } catch (error) {
-        await page.reload()
+        try {
+          await page.reload()
+        }
+        catch (error) {
+          continue
+        }
       }
     }
 
@@ -101,7 +107,7 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
     //Go to Cart
     await page.goto('https://www.bestbuy.com/cart')
 
-    console.log("Trying to checkout")
+    console.log("Trying to checkout of here")
 
     //Checkout Button
     await page.waitForTimeout(10000)
@@ -109,9 +115,14 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
     await checkoutButton.click()
 
     await page.waitForTimeout(10000)
+    await page.type('input[id="credit-card-cvv"]', cvv)
 
     const placeYourOrder = await page.$('button[class="btn btn-lg btn-block btn-primary button__fast-track"]')
     await placeYourOrder.click()
+
+    await page.waitForTimeout(60000)
+
+    console.log("Order submitted")
 
   } catch (error) {
     console.log(error)
@@ -119,14 +130,3 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
     await browser.close();
   }
 }
-
-
-/*
-/identity/signin?token=tid%3A39f718ee-2d0a-11eb-95ae-12e142c46721'
-      //Sign in link with return to power beats pro
-      //'https://www.bestbuy.com/identity/signin?token=tid%3A7a7d6cf9-2cf2-11eb-8fef-0a2bfd6cfd27'
-      //Sign in link with return to usb drive
-      //'https://www.bestbuy.com/identity/signin?token=tid%3A9895e0c1-2cf9-11eb-9a24-0e7bb6f6e84f'
-      //Sign in link with return to playstation
-      //'https://www.bestbuy.com/identity/signin?token=tid%3A87ac6c5e-2cec-11eb-939b-0e51b584aadb'
-      */
