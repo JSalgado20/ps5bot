@@ -1,5 +1,8 @@
+import * as fs from 'fs'
 import { GluegunToolbox } from 'gluegun'
-import { BESTBUY, TARGET } from '../contants'
+import { TARGET, BESTBUY } from '../contants'
+import { scrapeTarget } from '../utils/scrape-target-util'
+import { scrapeBestBuy } from '../utils/scrape-bestbuy-util'
 
 module.exports = {
   name: 'scrape',
@@ -7,39 +10,29 @@ module.exports = {
   description: 'Runs the webscraper',
   run: async (toolbox: GluegunToolbox) => {
     // retrieve the tools from the toolbox that we will need
-    const { scrape } = toolbox
+    const { prompt } = toolbox
 
-    scrape(BESTBUY)
-    scrape(TARGET)
-  }
-  /*
-  const { sitesToScrape }: { sitesToScrape: string[] } = await prompt.ask({
-    type: 'multiselect',
-    name: 'sitesToScrape',
-    message: `Which sites do you want to scrape? (press space to select)`,
-    choices: [PLAYSTATION_DIRECT, TARGET, WALMART, BESTBUY]
-  })
-  
+    const config = JSON.parse(fs.readFileSync('../config.json', 'utf8'))
 
-  
-  if (sitesToScrape.length === 0) {
-    await Promise.allSettled([
-      scrape(TARGET),
-      scrape(WALMART),
-      scrape(PLAYSTATION_DIRECT),
-      scrape(BESTBUY)
-    ])
-  } else {
-    if (sitesToScrape.includes(TARGET)) {
-      await scrape(TARGET)
-    } else if (sitesToScrape.includes(WALMART)) {
-      await scrape(WALMART)
-    } else if (sitesToScrape.includes(BESTBUY)) {
-      await scrape(BESTBUY)
+    const { sitesToScrape }: { sitesToScrape: string[] } = await prompt.ask({
+      type: 'multiselect',
+      name: 'sitesToScrape',
+      message: `Which sites do you want to scrape? (press space to select)`,
+      choices: [TARGET, BESTBUY]
+    })
+
+    if (sitesToScrape.length === 3) {
+      await Promise.allSettled([
+        scrapeTarget(config),
+        scrapeBestBuy(config)
+      ])
     } else {
-      await scrape(BESTBUY)
+      if (sitesToScrape.includes(TARGET)) {
+        scrapeTarget(config)
+      }
+      if (sitesToScrape.includes(BESTBUY)) {
+        scrapeBestBuy(config)
+      }
     }
   }
-}
-*/
 }

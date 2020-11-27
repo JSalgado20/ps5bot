@@ -57,7 +57,7 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
     )
     await signInButton.click()
 
-    console.log("Waiting for the page to load")
+    console.log("Best Buy: Waiting for the page to load")
     await page.waitForTimeout(10000)
 
     //Go to item page
@@ -69,7 +69,7 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
     )
 
 
-    console.log("Trying to find add to cart")
+    console.log("Best Buy: Trying to find add to cart")
     // keep refreshing until "Add to Cart" is visible
     while (true) {
       try {
@@ -90,7 +90,7 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
       }
     }
 
-    console.log("Trying to click Add to cart")
+    console.log("Best Buy: Trying to click Add to cart")
     //Add To Cart
     //btn btn-primary btn-lg btn-block btn-leading-ficon add-to-cart-button
     //data-sku-id="6341994" //powerbeats pro
@@ -107,7 +107,7 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
     //Go to Cart
     await page.goto('https://www.bestbuy.com/cart')
 
-    console.log("Trying to checkout of here")
+    console.log("Best Buy: Trying to checkout of here")
 
     //Checkout Button
     await page.waitForTimeout(10000)
@@ -122,7 +122,7 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
 
     await page.waitForTimeout(60000)
 
-    console.log("Order submitted")
+    console.log("Best Buy: Order submitted")
 
   } catch (error) {
     console.log(error)

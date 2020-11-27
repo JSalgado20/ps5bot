@@ -73,7 +73,7 @@ export const scrapeTarget = async (config: { [key: string]: string }) => {
     let shipItOnly: boolean = false;
 
 
-    console.log("Trying to find add to cart")
+    console.log("Target: Trying to find add to cart")
     // keep refreshing until "Add to Cart" is visible
     while (true) {
       try {

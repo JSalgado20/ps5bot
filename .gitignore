@@ -6,5 +6,5 @@ coverage
 dist
 build
 .vscode
-
 config.json
+configs.json
