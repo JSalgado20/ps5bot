@@ -1,17 +1,6 @@
+//const config = JSON.parse(fs.readFileSync('/Users/mustafasoby/Documents/coding/PS5Bot/PS5bot/config.json', 'utf8'))
+
 import * as fs from 'fs'
-import { scrapeTarget } from '../utils/scrape-target-util'
-
-
-const config = JSON.parse(fs.readFileSync('/Users/mustafasoby/Documents/coding/PS5Bot/PS5bot/config.json', 'utf8'))
-scrapeTarget(config)
-
-
-
-
-
-
-
-/*import * as fs from 'fs'
 import { GluegunToolbox } from 'gluegun'
 import { TARGET, BESTBUY } from '../contants'
 import { scrapeTarget } from '../utils/scrape-target-util'
@@ -49,4 +38,3 @@ module.exports = {
     }
   }
 }
-*/

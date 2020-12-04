@@ -14,6 +14,9 @@ const command: GluegunCommand = {
     All data will only be stored in your computer, don't worry about this being stored remotely. 
     (Regardless, all the program will ask you for is your cvv, target email & password, and best buy email and password.)
 
+    When it asks for your PS5 BestBuy and target link, please enter the link of the kind of ps5 you want to buy. Refer to the
+    youtube videos to see which link. (This techinically works for any product)
+
     You can choose to fill out the configs in config.json based on template provided in configTemplate.json.
     (But answering these questions right now will do that for you)
     `)
@@ -22,6 +25,8 @@ const command: GluegunCommand = {
     const targetPassword = await input('Target Password', prompt, print)
     const bestBuyEmail = await input('BestBuy Email', prompt, print)
     const bestBuyPassword = await input('BestBuy Password', prompt, print)
+    const bestBuyLink = await input('PS5 BestBuy Link', prompt, print)
+    const targetLink = await input('PS5 Target Link', prompt, print)
 
     print.info(`
     ...Saving config...
@@ -32,7 +37,9 @@ const command: GluegunCommand = {
       targetEmail,
       targetPassword,
       bestBuyEmail,
-      bestBuyPassword
+      bestBuyPassword,
+      bestBuyLink,
+      targetLink
     }
     fs.writeFileSync('../config.json', JSON.stringify(config, null, 4))
 

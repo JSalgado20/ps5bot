@@ -6,7 +6,7 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
     cvv,
     bestBuyEmail,
     bestBuyPassword,
-    //cvv
+    bestBuyLink
   } = config
 
   const browser = await puppeteer.launch({
@@ -61,16 +61,7 @@ export const scrapeBestBuy = async (config: { [key: string]: string }) => {
     await page.waitForTimeout(10000)
 
     //Go to item page
-    await page.goto(
-      //Paper Link
-      //'https://www.bestbuy.com/site/insignia-92-bright-multipurpose-paper-500-count-white/2449084.p?skuId=2449084'
-
-      //Digital PS5 Link
-      //'https://www.bestbuy.com/site/sony-playstation-5-digital-edition-console/6430161.p?skuId=6430161'
-
-      //PS5 Console
-      'https://www.bestbuy.com/site/sony-playstation-5-console/6426149.p?skuId=6426149'
-    )
+    await page.goto(bestBuyLink)
 
 
     console.log("Best Buy: Trying to find add to cart")
