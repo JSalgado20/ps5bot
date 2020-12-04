@@ -1,4 +1,4 @@
-# PS5Bot
+# PS5Bot - README file was corrupted, working on restoring it, everything else is fine.
 ## TLDR: This code can be used by people who are not programmers. It will be easier if you know how to code, but you can do without it.
 ## Project Overview
 ### Credit
