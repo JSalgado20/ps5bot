@@ -13,7 +13,7 @@ const command: GluegunCommand = {
 
     All data will only be stored in your computer, don't worry about this being stored remotely. 
     (Regardless, all the program will ask you for is your cvv, target email & password, and best buy email and password.)
-./ps5bot s
+
     When it asks for your PS5 BestBuy and target link, please enter the link of the kind of ps5 you want to buy. Refer to the
     youtube videos to see which link. (This techinically works for any product)
 
