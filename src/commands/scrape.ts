@@ -1,4 +1,3 @@
-//const config = JSON.parse(fs.readFileSync('/Users/mustafasoby/Documents/coding/PS5Bot/PS5bot/config.json', 'utf8'))
 
 import * as fs from 'fs'
 import { GluegunToolbox } from 'gluegun'
